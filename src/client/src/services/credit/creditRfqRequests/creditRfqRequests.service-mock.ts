@@ -5,10 +5,10 @@ import {
   CancelRfqRequest,
   CreateQuoteRequest,
   CreateRfqRequest,
-  WorkflowService,
 } from "@/generated/TradingGateway"
 import { createSignal } from "@react-rxjs/utils"
-import { tap } from "rxjs/operators"
+import { tap } from "rxjs"
+import { mockWorkflowService as WorkflowService } from "../mockWorkflowService"
 import { CreatedCreditRfq } from "./types"
 
 export const [createdCreditRfq$, setCreatedCreditRfq] =

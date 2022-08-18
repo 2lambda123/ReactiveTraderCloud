@@ -1,5 +1,6 @@
 import { Loader } from "@/components/Loader"
-import { CreditTrade, creditTrades$ } from "@/services/trades"
+import { creditTrades$ } from "@/services/credit/creditTrades"
+import { CreditTrade } from "@/services/trades"
 import { Subscribe } from "@react-rxjs/core"
 import styled from "styled-components"
 import { ColDefContext, ColFieldsContext, Trades$Context } from "./Context"

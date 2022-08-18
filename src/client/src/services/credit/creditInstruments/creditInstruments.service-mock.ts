@@ -124,6 +124,8 @@ export const [useCreditInstrumentsByCusip, creditInstrumentsByCusip$] = bind<
   {},
 )
 
+export const [useCreditInstruments] = bind(creditInstruments$, [])
+
 export const [useCreditInstrumentById, creditInstrumentById$] = bind(
   (instrumentId: number) =>
     creditInstruments$.pipe(

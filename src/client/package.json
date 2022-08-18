@@ -23,6 +23,7 @@
     "test": "jest",
     "lint": "eslint",
     "dev": "cross-env TARGET=web vite",
+    "dev:mocks": "cross-env TARGET=web VITE_MOCKS=true vite",
     "start": "cross-env TARGET=web vite",
     "build": "cross-env TARGET=web vite build",
     "serve": "cross-env TARGET=web vite preview",
@@ -39,7 +40,8 @@
     "format": "prettier --write README.md \"src/**/*.{js,jsx,ts,tsx,json,md}\"",
     "generateCod": "hydra-web-codegen -i trading-gateway.hyer -o src/generated",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o ./dist/storybook"
+    "build-storybook": "build-storybook -o ./dist/storybook",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@adaptive/hydra-platform": "^3.99.0",
@@ -106,6 +108,7 @@
     "babel-loader": "^8.2.2",
     "concurrently": "^6.1.0",
     "cross-env": "^6.0.3",
+    "cypress": "^10.6.0",
     "eslint": "^7.23.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.4.0",

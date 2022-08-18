@@ -1,7 +1,9 @@
 import { DealerBody } from "@/generated/TradingGateway"
 import { bind } from "@react-rxjs/core"
 import { from } from "rxjs"
-import { scan } from "rxjs/operators"
+import { map, scan } from "rxjs/operators"
+
+export const ADAPTIVE_BANK_NAME = "Adaptive Bank"
 
 const fakeDealers: DealerBody[] = [
   {
@@ -44,6 +46,10 @@ const fakeDealers: DealerBody[] = [
     id: 9,
     name: "Capital One",
   },
+  {
+    id: 10,
+    name: "Adaptive Bank",
+  },
 ]
 
 const fakeCreditDealers$ = from(fakeDealers)
@@ -55,4 +61,11 @@ export const [useCreditDealers, creditDealers$] = bind<DealerBody[]>(
     }, []),
   ),
   [],
+)
+
+export const [useCreditDealerById, creditDealerById$] = bind(
+  (dealerId: number) =>
+    creditDealers$.pipe(
+      map((dealers) => dealers.find((dealer) => dealer.id === dealerId)),
+    ),
 )

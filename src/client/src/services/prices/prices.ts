@@ -7,6 +7,8 @@ import { withIsStaleData } from "../connection"
 import { withConnection } from "../withConnection"
 import { PriceMovementType, HistoryPrice, Price } from "./types"
 
+const HISTORY_SIZE = 50
+
 const priceMappper = (input: PriceTick): HistoryPrice => ({
   ask: input.ask,
   bid: input.bid,
@@ -67,7 +69,6 @@ export const [usePrice, getPrice$] = bind((symbol: string) =>
   ),
 )
 
-const HISTORY_SIZE = 50
 export const [useHistoricalPrices, getHistoricalPrices$] = bind<
   [string],
   HistoryPrice[]

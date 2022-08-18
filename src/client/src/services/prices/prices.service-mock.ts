@@ -1,7 +1,7 @@
 import { bind } from "@react-rxjs/core"
 import { Observable, of } from "rxjs"
-import { scan, map } from "rxjs/operators"
-import { PriceMovementType, HistoryPrice, Price } from "./types"
+import { map, scan } from "rxjs/operators"
+import { HistoryPrice, Price, PriceMovementType } from "./types"
 
 function* makePriceGenerator(
   symbol: string,
@@ -49,6 +49,17 @@ const [, getSymbolPrices$] = bind(
       return () => {
         clearTimeout(token)
       }
+    }),
+)
+
+export const [, getPriceUpdates$] = bind(
+  (symbol: string) =>
+    new Observable<HistoryPrice>((observer) => {
+      const priceGenerator = makePriceGenerator(symbol)
+
+      setInterval(() => {
+        observer.next(priceGenerator.next().value)
+      }, 150)
     }),
 )
 

@@ -1,4 +1,5 @@
-import { CreditTrade, creditTrades$, FxTrade, trades$ } from "@/services/trades"
+import { creditTrades$ } from "@/services/credit/creditTrades"
+import { CreditTrade, FxTrade, trades$ } from "@/services/trades"
 import { bind } from "@react-rxjs/core"
 import { createSignal } from "@react-rxjs/utils"
 import { startOfDay } from "date-fns"
