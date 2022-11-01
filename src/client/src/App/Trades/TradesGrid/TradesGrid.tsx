@@ -9,6 +9,7 @@ const TableWrapper = styled.div`
   height: calc(100% - 4.75rem);
   overflow-x: scroll;
   overflow-y: scroll;
+  contain: content;
 `
 const Table = styled.table`
   background-color: ${({ theme }) => theme.core.lightBackground};
@@ -44,6 +45,7 @@ const TableBodyRow = styled.tr<{ pending?: boolean; highlight?: boolean }>`
   height: 2rem;
   ${({ highlight }) => highlight && highlightBackgroundColor}
 `
+// content-visibility: auto;
 
 const TableBodyCell = styled.td<{
   align?: "right" | "left"
@@ -98,6 +100,12 @@ export const TradesGridInner = <Row extends Trade>({
   const colDef = useColDef()
   const fields = useColFields()
   const trades = useTableTrades(rows$, colDef)
+
+  // const allTrades = useTableTrades(rows$, colDef)
+  // const trades = allTrades.length > 100 ? allTrades.slice(0, 100) : allTrades
+
+  console.warn(`BLOTTER: display ${trades.length} trades`)
+
   return (
     <TableWrapper>
       <Table>
