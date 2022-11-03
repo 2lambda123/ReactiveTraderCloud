@@ -54,10 +54,6 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Test
-        run: |
-          npm run test
-
       - name: Build (web)
         env:
           DOMAIN: https://web.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
@@ -66,7 +62,6 @@ jobs:
           ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
         run: |
           npm run build
-          npm run build-storybook
 
       - name: Deploy (web)
         run: |
@@ -74,67 +69,3 @@ jobs:
             -h "Cache-Control: no-cache" \
             rsync -d -r dist \
             gs://$BUCKET_WEB/branch/${{ steps.vars.outputs.branch }}
-
-      - name: Build (OpenFin)
-        env:
-          DOMAIN: https://openfin.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
-          URL_PATH: ${{ steps.vars.outputs.URL_SUFFIX }}
-          VITE_BUILD_VERSION: ${{ github.sha }}
-          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
-        run: npm run openfin:build
-
-      - name: Deploy (OpenFin)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_OPENFIN/branch/${{ steps.vars.outputs.branch }}
-
-      - name: Build (OpenFin - Workspace)
-        env:
-          DOMAIN: https://openfin.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
-          URL_PATH: ${{ steps.vars.outputs.URL_SUFFIX }}/workspace
-          VITE_BUILD_VERSION: ${{ github.sha }}
-          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
-        run: |
-          npm ci
-          npm run build
-        working-directory: src/workspace
-
-      - name: Deploy (OpenFin - Workspace)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_OPENFIN/branch/${{ steps.vars.outputs.branch }}/workspace
-        working-directory: src/workspace
-
-      - name: Build (Finsemble)
-        env:
-          DOMAIN: https://finsemble.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
-          URL_PATH: ${{ steps.vars.outputs.URL_SUFFIX }}
-          VITE_BUILD_VERSION: ${{ github.sha }}
-          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
-        run: npm run finsemble:build
-
-      - name: Deploy (Finsemble)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_FINSEMBLE/branch/${{ steps.vars.outputs.branch }}
-
-      - name: Build (Launcher)
-        env:
-          DOMAIN: https://launcher.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
-          URL_PATH: ${{ steps.vars.outputs.URL_SUFFIX }}
-          VITE_BUILD_VERSION: ${{ github.sha }}
-          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
-        run: npm run launcher:build
-
-      - name: Deploy (Launcher)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_LAUNCHER/branch/${{ steps.vars.outputs.branch }}

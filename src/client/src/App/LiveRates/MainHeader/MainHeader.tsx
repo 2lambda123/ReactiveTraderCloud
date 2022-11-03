@@ -59,7 +59,7 @@ export const MainHeader: React.FC = () => {
           </NavItem>
         ))}
       </LeftNav>
-      <LeftNavTitle>Live Alan 2</LeftNavTitle>
+      <LeftNavTitle>Live Alan 3</LeftNavTitle>
       <RightNav>
         <CurrencyDropdown>
           <DropdownMenu
