@@ -31,6 +31,7 @@ const doubleSlashesInURLRegex = /([^:])(\/{2,})/g
 export function register(config?: Config) {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
+      console.warn(`SW: register: window.onload`)
       // This url can be changed back to using window.location.origin once we have fixed the env gateway url pathing
       const baseAddress =
         ENVIRONMENT !== "env" ? window.location.origin : window.location.href
@@ -63,7 +64,9 @@ function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
+      console.warn(`SW: registration promise resolved`)
       registration.onupdatefound = () => {
+        console.warn(`SW: registration.onupdatefound`)
         const installingWorker = registration.installing
         if (installingWorker == null) {
           return
