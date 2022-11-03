@@ -43,7 +43,7 @@ export const MainHeader: React.FC = () => {
   return (
     <Header>
       <LeftNav>
-        <LeftNavItemFirst>Live Rates</LeftNavItemFirst>
+        <LeftNavItemFirst>Live Alan 1</LeftNavItemFirst>
         {options.map((currencyOption) => (
           <NavItem
             data-testid={`menuButton-${currencyOption.toString()}`}

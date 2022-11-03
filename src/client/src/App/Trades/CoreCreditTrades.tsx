@@ -9,6 +9,8 @@ import { TradesHeader } from "./TradesHeader"
 import { useCreditTradeRowHighlight } from "./TradesState"
 import { creditColDef, creditColFields } from "./TradesState/colConfig"
 
+console.warn("LAZY --- credit trades imported")
+
 const TradesStyle = styled.div`
   height: 100%;
   width: 100%;
