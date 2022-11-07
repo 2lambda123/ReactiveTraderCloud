@@ -69,7 +69,11 @@ function registerValidSW(swUrl: string, config?: Config) {
 
       if (registration.active) {
         registration.active.onstatechange = (event) => {
-          console.warn("SW: registration .. active onstatechange:", event)
+          console.warn(
+            `SW: registration .. active onstatechange:\n${JSON.stringify(
+              event,
+            )}`,
+          )
         }
         registration.active.onerror = (error) => {
           console.error("SW: registration .. active onerror:", error)
