@@ -66,6 +66,15 @@ function registerValidSW(swUrl: string, config?: Config) {
     .register(swUrl)
     .then((registration) => {
       console.warn(`SW: registration promise resolved`, registration)
+
+      if (registration.active) {
+        registration.active.onstatechange = (event) => {
+          console.warn("SW: registration .. active onstatechange:", event)
+        }
+        registration.active.onerror = (error) => {
+          console.error("SW: registration .. active onerror:", error)
+        }
+      }
       registration.onupdatefound = () => {
         console.warn(`SW: registration.onupdatefound`)
         const installingWorker = registration.installing
@@ -106,6 +115,10 @@ function registerValidSW(swUrl: string, config?: Config) {
     .catch((error) => {
       console.error("Error during service worker registration:", error)
     })
+
+  navigator.serviceWorker.addEventListener("controllerchange", (event) => {
+    console.warn(`SW: controllerchange`, event)
+  })
 }
 
 function checkValidServiceWorker(swUrl: string, config?: Config) {
