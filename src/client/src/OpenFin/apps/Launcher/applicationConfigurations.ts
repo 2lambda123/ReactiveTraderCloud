@@ -3,7 +3,8 @@ import { constructUrl } from "@/utils/url"
 import {
   limitCheckerIcon,
   reactiveAnalyticsIcon,
-  reactiveTraderIcon,
+  reactiveTraderCreditIcon,
+  reactiveTraderFxIcon,
 } from "./icons"
 import { getReactiveAnalyticsUrls, getReactiveTraderUrl } from "./utils/url"
 
@@ -87,7 +88,7 @@ const baseAppConfigs: ApplicationConfig[] = [
     tooltipName: `Launch Reactive Trader®${envSuffix}`,
     uuid: `reactive-trader-${env}`,
     url: reactiveTraderFxManifestUrl,
-    icon: reactiveTraderIcon,
+    icon: reactiveTraderFxIcon,
   },
   {
     ...baseConfig(),
@@ -96,7 +97,7 @@ const baseAppConfigs: ApplicationConfig[] = [
     tooltipName: `Launch Reactive Trader® Credit${envSuffix}`,
     uuid: `reactive-trader-credit-${env}`,
     url: reactiveTraderCreditManifestUrl,
-    icon: reactiveTraderIcon, // TODO need a differentiating icon
+    icon: reactiveTraderCreditIcon,
   },
   {
     ...baseConfig(),

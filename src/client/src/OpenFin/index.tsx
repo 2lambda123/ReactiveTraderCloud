@@ -7,9 +7,9 @@ import { OpenFinContactDisplay } from "@/OpenFin/Footer/ContactUsButton"
 import { BASE_PATH } from "@/constants"
 import { Loader } from "@/components/Loader"
 
-const LauncherRoutes = lazy(() => import("@/OpenFin/Launcher"))
-const FxRoutes = lazy(() => import("@/OpenFin/FX"))
-const CreditRoutes = lazy(() => import("@/OpenFin/Credit"))
+const LauncherRoutes = lazy(() => import("@/OpenFin/apps/Launcher"))
+const FxRoutes = lazy(() => import("@/OpenFin/apps/FX"))
+const CreditRoutes = lazy(() => import("@/OpenFin/apps/Credit"))
 
 export const OpenFinApp: React.FC = () => (
   <BrowserRouter basename={BASE_PATH}>
@@ -20,12 +20,12 @@ export const OpenFinApp: React.FC = () => (
         </Suspense>
       </Route>
       <Route path="/fx">
-        <Suspense fallback={Loader}>
+        <Suspense fallback={<Loader />}>
           <FxRoutes />
         </Suspense>
       </Route>
       <Route path="/credit">
-        <Suspense fallback={Loader}>
+        <Suspense fallback={<Loader />}>
           <CreditRoutes />
         </Suspense>
       </Route>

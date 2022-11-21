@@ -10,7 +10,7 @@ import {
   LoadingWrapper,
   InlineIntent,
 } from "./styles"
-import { reactiveTraderIcon } from "../icons"
+import { reactiveTraderFxIcon } from "../icons"
 import { NlpIntent } from "../services/nlpService"
 import { handleIntent } from "./intents"
 import { open } from "../tools"
@@ -25,7 +25,7 @@ export const SuggestionWrapper: React.FC<{
       <IntentActions>
         <IntentActionWrapper>
           <LogoWrapper>
-            <PlatformLogoWrapper>{reactiveTraderIcon}</PlatformLogoWrapper>
+            <PlatformLogoWrapper>{reactiveTraderFxIcon}</PlatformLogoWrapper>
           </LogoWrapper>
           <span>Reactive Trader®</span>
         </IntentActionWrapper>

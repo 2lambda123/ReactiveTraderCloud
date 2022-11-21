@@ -1,5 +1,5 @@
-import { useOverlayElement } from "@/OpenFin/Launcher/overlayContext"
-import { onResetInput } from "@/OpenFin/Launcher/services/nlpService"
+import { useOverlayElement } from "@/OpenFin/apps/Launcher/overlayContext"
+import { onResetInput } from "@/OpenFin/apps/Launcher/services/nlpService"
 import { ExecutionStatus, ExecutionTrade } from "@/services/executions"
 import { Direction } from "@/services/trades"
 import { formatNumber } from "@/utils"

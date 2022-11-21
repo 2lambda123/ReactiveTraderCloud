@@ -1,5 +1,5 @@
 import styled from "@emotion/styled"
-import { limitCheckerIcon } from "@/OpenFin/Launcher/icons"
+import { limitCheckerIcon } from "@/OpenFin/apps/Launcher/icons"
 
 const Indicator = styled.div`
   display: flex;

@@ -17,7 +17,7 @@
     }
   },
   "runtime": {
-    "version": "17.85.53.10"
+    "version": "19.89.61.8"
   },
   "splashScreenImage": "<BASE_URL>/static/media/splash.png",
   "shortcut": {

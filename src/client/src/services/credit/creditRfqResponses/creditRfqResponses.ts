@@ -1,4 +1,4 @@
-import { ROUTES_CONFIG } from "@/constants"
+import { CREDIT_SELL_SIDE_TICKET_HEIGHT, ROUTES_CONFIG } from "@/constants"
 import {
   CreateQuoteResponse,
   DealerBody,
@@ -100,15 +100,18 @@ const sellSideTicket$ = createdCreditRfq$.pipe(
 function openDealerTicketForRfq(rfqId: string, dealerId: string) {
   openWindow({
     url: constructUrl(
+      // TODO think about how to avoid coupling with potentially different routes OF vs web
+      // TODO ensure no pop ups broke when I changed the FX routes
       ROUTES_CONFIG.sellSideTicket
         .replace(":rfqId", rfqId)
         .replace(":dealerId", dealerId),
     ),
     name: `CreditRFQ-${rfqId}-${dealerId}`,
+    displayName: "Credit RFQ",
     width: 330,
-    height: 262,
+    height: CREDIT_SELL_SIDE_TICKET_HEIGHT,
     x: window.innerWidth - 330,
-    y: window.innerHeight - 262,
+    y: window.innerHeight - CREDIT_SELL_SIDE_TICKET_HEIGHT,
   })
 }
 

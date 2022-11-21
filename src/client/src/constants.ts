@@ -12,6 +12,9 @@ export const ENVIRONMENT: Environment =
     (BASE_URL || "").includes(`.${env}.`),
   ) as Environment) || "local"
 
+// TODO probably need unified routes for OF and Web
+// NOTE: these routes are hard coded in the OpenFin manifest JSON files,
+// so any changes here need to be manually synchronized with those files.
 export const ROUTES_CONFIG = {
   tile: "/spot/:symbol",
   tiles: "/tiles",
@@ -25,3 +28,6 @@ export const ROUTES_CONFIG = {
   creditBlotter: "/credit/blotter",
   launcher: "/launcher",
 }
+
+export const CREDIT_RFQ_EXPIRY_SECONDS = 120
+export const CREDIT_SELL_SIDE_TICKET_HEIGHT = 262

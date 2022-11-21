@@ -1,7 +1,7 @@
 import {
   nlpIntent$,
   NlpIntentType,
-} from "@/OpenFin/Launcher/services/nlpService"
+} from "@/OpenFin/apps/Launcher/services/nlpService"
 import { Direction } from "@/services/trades"
 import {
   catchError,
