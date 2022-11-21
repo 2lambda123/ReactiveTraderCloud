@@ -10,7 +10,10 @@
       "url": "<BASE_URL>/openfin-sub-window-frame"
     },
     "defaultViewOptions": {
-      "contextMenu": true
+      "contextMenuSettings": {
+        "enabled": true,
+        "devtools": true
+      }
     }
   },
   "runtime": {
