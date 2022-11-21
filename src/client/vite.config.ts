@@ -1,5 +1,5 @@
 import eslint from "@rollup/plugin-eslint"
-import reactRefresh from "@vitejs/plugin-react-refresh"
+import react from "@vitejs/plugin-react"
 import { readdirSync, statSync } from "fs"
 import path, { resolve } from "path"
 import copy from "rollup-plugin-copy"
@@ -282,7 +282,7 @@ const setConfig: (env: ConfigEnv) => UserConfigExport = ({ mode }) => {
   const isDev = mode === "development"
   const viteBaseUrl = isDev ? "/" : getBaseUrl(false)
 
-  const plugins = isDev ? [reactRefresh()] : [customPreloadPlugin()]
+  const plugins = isDev ? [react()] : [customPreloadPlugin()]
 
   const TARGET = process.env.TARGET || "web"
 
@@ -322,9 +322,6 @@ const setConfig: (env: ConfigEnv) => UserConfigExport = ({ mode }) => {
     base: viteBaseUrl,
     define: {
       __TARGET__: JSON.stringify(TARGET),
-    },
-    esbuild: {
-      jsxInject: `import React from 'react'`,
     },
     build: {
       sourcemap: true,
