@@ -1,10 +1,8 @@
-import eslint from "@rollup/plugin-eslint"
 import react from "@vitejs/plugin-react"
 import { readdirSync, statSync } from "fs"
 import path, { resolve } from "path"
 import copy from "rollup-plugin-copy"
 import modulepreload from "rollup-plugin-modulepreload"
-import typescript from "rollup-plugin-typescript2"
 import { injectManifest } from "rollup-plugin-workbox"
 import {
   ConfigEnv,
@@ -153,16 +151,6 @@ const customPreloadPlugin = () => {
   result.writeBundle = result.generateBundle
   delete result.generateBundle
   return result
-}
-
-const eslintPlugin = {
-  ...eslint({ include: "src/**/*.+(js|jsx|ts|tsx)" }),
-  enforce: "pre",
-}
-
-const typescriptPlugin = {
-  ...typescript(),
-  enforce: "pre",
 }
 
 const copyOpenfinPlugin = (dev: boolean) => {
