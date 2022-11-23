@@ -1,9 +1,5 @@
-import { Loader } from "@/components/Loader"
-import { lazy, Suspense } from "react"
 import styled from "styled-components"
-
-const TradesCoreDeferred = import("./CoreCreditTrades")
-const TradesCore = lazy(() => TradesCoreDeferred)
+import TradesCore from "./CoreCreditTrades"
 
 const TradesWrapper = styled.article`
   height: 100%;
@@ -14,8 +10,6 @@ const TradesWrapper = styled.article`
 
 export const CreditTrades: React.FC = () => (
   <TradesWrapper>
-    <Suspense fallback={<Loader />}>
-      <TradesCore />
-    </Suspense>
+    <TradesCore />
   </TradesWrapper>
 )

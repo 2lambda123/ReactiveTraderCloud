@@ -100,8 +100,6 @@ const sellSideTicket$ = createdCreditRfq$.pipe(
 function openDealerTicketForRfq(rfqId: string, dealerId: string) {
   openWindow({
     url: constructUrl(
-      // TODO think about how to avoid coupling with potentially different routes OF vs web
-      // TODO ensure no pop ups broke when I changed the FX routes
       ROUTES_CONFIG.sellSideTicket
         .replace(":rfqId", rfqId)
         .replace(":dealerId", dealerId),
