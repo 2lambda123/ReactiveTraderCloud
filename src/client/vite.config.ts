@@ -47,8 +47,7 @@ function apiMockReplacerPlugin(): Plugin {
 // Replace files with .<target> if they exist
 // Note - resolveId source and importer args are different between dev and build
 // Some more investigation and work should be done to improve this when possible
-function targetBuildPlugin(dev: boolean, preTarget: string): Plugin {
-  const target = preTarget === "launcher" ? "openfin" : preTarget
+function targetBuildPlugin(dev: boolean, target: string): Plugin {
   return {
     name: "targetBuildPlugin",
     enforce: "pre",
@@ -90,7 +89,7 @@ function targetBuildPlugin(dev: boolean, preTarget: string): Plugin {
         )
 
         // Source doesn't have file extension, so try all extensions
-        let candidate
+        let candidate: string | null = null
         const extensions = ["ts", "tsx"]
         for (let i = 0; i < extensions.length; i++) {
           try {
@@ -166,28 +165,23 @@ const typescriptPlugin = {
   enforce: "pre",
 }
 
-const copyOpenfinPlugin = (dev: boolean, target: "openfin" | "launcher") => {
+const copyOpenfinPlugin = (dev: boolean) => {
   const env = process.env.ENVIRONMENT || "local"
   const openfinBaseUrl = getBaseUrl(dev || env === "local")
+  const transform = (contents: Buffer) =>
+    contents
+      .toString()
+      .replace(/<BASE_URL>/g, openfinBaseUrl)
+      .replace(/<ENV_NAME>/g, env)
+      .replace(/<ENV_SUFFIX>/g, env === "prod" ? "" : env.toUpperCase())
+  const dest = "./dist/config"
 
   return {
     ...copy({
       targets: [
-        {
-          src: `./public-openfin/${
-            target === "launcher" ? "launcher.json" : "app.json"
-          }`,
-          dest: "./dist/config",
-          transform: (contents) =>
-            contents
-              .toString()
-              .replace(/<BASE_URL>/g, openfinBaseUrl)
-              .replace(/<ENV_NAME>/g, env)
-              .replace(
-                /<ENV_SUFFIX>/g,
-                env === "prod" ? "" : env.toUpperCase(),
-              ),
-        },
+        { src: "./public-openfin/launcher.json", dest, transform },
+        { src: "./public-openfin/rt-fx.json", dest, transform },
+        { src: "./public-openfin/rt-credit.json", dest, transform },
       ],
       verbose: true,
       // For dev, (most) output generation hooks are not called, so this needs to be buildStart.
@@ -288,9 +282,7 @@ const setConfig: (env: ConfigEnv) => UserConfigExport = ({ mode }) => {
   const isDev = mode === "development"
   const viteBaseUrl = isDev ? "/" : getBaseUrl(false)
 
-  const plugins = isDev
-    ? [eslintPlugin, typescriptPlugin, reactRefresh()]
-    : [customPreloadPlugin()]
+  const plugins = isDev ? [reactRefresh()] : [customPreloadPlugin()]
 
   const TARGET = process.env.TARGET || "web"
 
@@ -299,7 +291,7 @@ const setConfig: (env: ConfigEnv) => UserConfigExport = ({ mode }) => {
   }
 
   if (TARGET === "openfin" || TARGET === "launcher") {
-    plugins.push(copyOpenfinPlugin(isDev, TARGET))
+    plugins.push(copyOpenfinPlugin(isDev))
   }
 
   if (process.env.VITE_MOCKS) {

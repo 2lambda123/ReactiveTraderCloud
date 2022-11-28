@@ -23,4 +23,5 @@ export const ROUTES_CONFIG = {
   newRfq: "/credit/new-rfq",
   sellSideTicket: "/credit/sellside/:rfqId/dealer/:dealerId",
   creditBlotter: "/credit/blotter",
+  launcher: "/launcher",
 }
