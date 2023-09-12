@@ -51,79 +51,28 @@ jobs:
         with:
           project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
 
-      - name: Install
+  openfin-end-to-end-test:
+    name: Openfin end-to-end test
+    needs: build
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install dependencies
         run: npm ci
-
-      - name: Verify Quality (type checking, linting, format checking, tests)
-        run: |
-          npm run verify
-
-      - name: Build (web)
+      - name: Start openfin FX
+        run: npm run openfin:start:fx
+      - name: Run tests
         env:
-          DOMAIN: https://web.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
-          URL_PATH: ${{ steps.vars.outputs.URL_SUFFIX }}
-          VITE_BUILD_VERSION: ${{ github.sha }}
-          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
+          E2E_RTC_WEB_ROOT_URL: https://openfin.env.reactivetrader.com/branch/poc_setup-openfin-playwright
         run: |
-          npm run build
-          npm run storybook:build
-
-      - name: Deploy (web)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_WEB/branch/${{ steps.vars.outputs.BRANCH }}
-
-      - name: Build (OpenFin)
-        env:
-          DOMAIN: https://openfin.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
-          URL_PATH: ${{ steps.vars.outputs.URL_SUFFIX }}
-          VITE_BUILD_VERSION: ${{ github.sha }}
-          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
-        run: npm run openfin:build
-
-      - name: Deploy (OpenFin)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_OPENFIN/branch/${{ steps.vars.outputs.BRANCH }}
-
-      - name: Deploy (Launcher)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_LAUNCHER/branch/${{ steps.vars.outputs.BRANCH }}
-
-      - name: Build (OpenFin - Workspace)
-        env:
-          DOMAIN: https://openfin.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
-          URL_PATH: ${{ steps.vars.outputs.URL_SUFFIX }}/workspace
-          VITE_BUILD_VERSION: ${{ github.sha }}
-          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
-        run: |
-          npm run workspace:build
-
-      - name: Deploy (OpenFin - Workspace)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_OPENFIN/branch/${{ steps.vars.outputs.BRANCH }}/workspace
-
-      - name: Build (Finsemble)
-        env:
-          DOMAIN: https://finsemble.${{ steps.vars.outputs.ENVIRONMENT }}.reactivetrader.com
-          URL_PATH: ${{ steps.vars.outputs.URL_SUFFIX }}
-          VITE_BUILD_VERSION: ${{ github.sha }}
-          ENVIRONMENT: ${{ steps.vars.outputs.ENVIRONMENT }}
-        run: npm run finsemble:build
-
-      - name: Deploy (Finsemble)
-        run: |
-          gsutil -m \
-            -h "Cache-Control: no-cache" \
-            rsync -d -r dist \
-            gs://$BUCKET_FINSEMBLE/branch/${{ steps.vars.outputs.BRANCH }}
+          npm run e2e:openfin spot-tile.spec
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-report
+          path: packages/client/playwright-report
+          retention-days: 7

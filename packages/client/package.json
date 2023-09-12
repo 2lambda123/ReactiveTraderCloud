@@ -40,7 +40,7 @@
     "openfin:dev": "cross-env TARGET=openfin vite",
     "openfin:local": "npm run _runLocal --runcmd=\"TARGET=openfin vite\"",
     "_openfin:run": "cross-env-shell \"wait-on -l $npm_config_manifest_url && openfin -l -c $npm_config_manifest_url\"",
-    "openfin:run:fx": "npm run _openfin:run --manifest_url=http://localhost:1917/config/rt-fx.json",
+    "openfin:run:fx": "npm run _openfin:run --manifest_url=https://openfin.env.reactivetrader.com/branch/poc_setup-openfin-playwright/config/rt-fx.json",
     "openfin:run:credit": "npm run _openfin:run --manifest_url=http://localhost:1917/config/rt-credit.json",
     "openfin:run:limitchecker": "npm run _openfin:run --manifest_url=http://localhost:1917/config/limit-checker.json",
     "openfin:run:launcher": "npm run _openfin:run --manifest_url=http://localhost:1917/config/launcher.json",
@@ -73,6 +73,7 @@
   "dependencies": {
     "@adaptive/hydra-platform": "4.12.0",
     "@finos/fdc3": "^1.2.0",
+    "@openfin/automation-helpers": "^1.1.6",
     "@openfin/core": "31.75.4",
     "@openfin/workspace": "13.0.7",
     "@openfin/workspace-platform": "13.0.7",
