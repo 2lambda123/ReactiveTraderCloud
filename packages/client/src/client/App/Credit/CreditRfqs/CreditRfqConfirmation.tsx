@@ -24,8 +24,6 @@ import {
 
 const ConfirmationPill = styled.div<{ direction: Direction }>`
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   background-color: ${({ theme, direction }) =>
     theme.colors.spectrum.uniqueCollections[direction].base};
   display: flex;
@@ -37,6 +35,15 @@ const ConfirmationPill = styled.div<{ direction: Direction }>`
   & > svg {
     margin-right: 5px;
   }
+`
+
+const CreatedRFQConfirmationPill = styled(ConfirmationPill)`
+  z-index: 1;
+`
+
+const AcceptedRFQConfirmationPill = styled(ConfirmationPill)`
+  left: 50%;
+  transform: translateX(-50%);
 `
 
 const IconWrapper = styled.div<{ direction: Direction }>`
@@ -97,13 +104,13 @@ export const CreditRfqCreatedConfirmation = () => {
   const { direction, dealerIds, quantity, instrument } = confirmation.request
 
   return confirmation ? (
-    <ConfirmationPill direction={direction}>
+    <CreatedRFQConfirmationPill direction={direction}>
       You have sent an {direction} RFQ for {formatter(quantity)}{" "}
       {instrument?.name} to {dealerIds.length} dealers
       <IconWrapper direction={direction} onClick={onDismissMessage}>
         <FaTimes />
       </IconWrapper>
-    </ConfirmationPill>
+    </CreatedRFQConfirmationPill>
   ) : null
 }
 
@@ -147,13 +154,13 @@ export const CreditRfqAcceptedConfirmation = () => {
   }
 
   return confirmation ? (
-    <ConfirmationPill direction={rfq.direction}>
+    <AcceptedRFQConfirmationPill direction={rfq.direction}>
       <FaCheckCircle size={16} />
       You have accepted a quote for {formatter(rfq.quantity)} {instrument.name}{" "}
       @${(quote.state as AcceptedQuoteState).payload} from {dealer.name}
       <IconWrapper direction={rfq.direction} onClick={onDismissMessage}>
         <FaTimes />
       </IconWrapper>
-    </ConfirmationPill>
+    </AcceptedRFQConfirmationPill>
   ) : null
 }
