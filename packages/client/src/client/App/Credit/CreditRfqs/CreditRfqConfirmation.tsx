@@ -38,6 +38,7 @@ const ConfirmationPill = styled.div<{ direction: Direction }>`
 `
 
 const CreatedRFQConfirmationPill = styled(ConfirmationPill)`
+  margin-right: 15px;
   z-index: 1;
 `
 
