@@ -36,9 +36,14 @@ const ConfirmationPill = styled.div<{ direction: Direction }>`
     margin-right: 5px;
   }
 `
+const ConfirmationPillWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
 
 const CreatedRFQConfirmationPill = styled(ConfirmationPill)`
-  margin-right: 15px;
   z-index: 1;
 `
 
@@ -105,13 +110,15 @@ export const CreditRfqCreatedConfirmation = () => {
   const { direction, dealerIds, quantity, instrument } = confirmation.request
 
   return confirmation ? (
-    <CreatedRFQConfirmationPill direction={direction}>
-      You have sent an {direction} RFQ for {formatter(quantity)}{" "}
-      {instrument?.name} to {dealerIds.length} dealers
-      <IconWrapper direction={direction} onClick={onDismissMessage}>
-        <FaTimes />
-      </IconWrapper>
-    </CreatedRFQConfirmationPill>
+    <ConfirmationPillWrapper>
+      <CreatedRFQConfirmationPill direction={direction}>
+        You have sent an {direction} RFQ for {formatter(quantity)}{" "}
+        {instrument?.name} to {dealerIds.length} dealers
+        <IconWrapper direction={direction} onClick={onDismissMessage}>
+          <FaTimes />
+        </IconWrapper>
+      </CreatedRFQConfirmationPill>
+    </ConfirmationPillWrapper>
   ) : null
 }
 
