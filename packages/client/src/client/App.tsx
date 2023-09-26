@@ -9,6 +9,7 @@ import { getMainApp } from "./main"
 import {
   registerCreditAcceptedNotifications,
   registerFxNotifications,
+  registerRFQRequestConfirmationNotifications,
 } from "./notifications"
 import { GlobalScrollbarStyle, GlobalStyle, ThemeProvider } from "./theme"
 
@@ -23,6 +24,7 @@ export async function initApp() {
 
   registerFxNotifications()
   registerCreditAcceptedNotifications()
+  registerRFQRequestConfirmationNotifications()
 
   const container = document.getElementById("root")
   const root = createRoot(container as HTMLElement)

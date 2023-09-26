@@ -2,9 +2,10 @@ import { Subscription } from "rxjs"
 
 import {
   acceptedRfqWithQuote$,
+  ConfirmCreatedCreditRfq,
   lastQuoteReceived$,
   PricedQuoteDetails,
-  QuoteDetails,
+  rfqRequestConfirmation$,
   RfqWithPricedQuote,
 } from "@/services/credit"
 import { executions$, ExecutionTrade } from "@/services/executions"
@@ -13,6 +14,7 @@ import {
   processCreditAccepted,
   processCreditQuote,
   processFxExecution,
+  processRFQRequestConfirmation,
 } from "./notificationsUtils"
 import { constructUrl } from "./utils/constructUrl"
 
@@ -37,6 +39,19 @@ const sendQuoteAcceptedNotification = ({ rfq, quote }: RfqWithPricedQuote) => {
 
   const options: NotificationOptions = {
     body: `${rfq.direction} ${tradeDetails}`,
+    icon: creditIconUrl,
+    dir: "ltr",
+  }
+
+  new Notification(title, options)
+}
+
+const sendRFQCreatedConfirmationNotification = (
+  rfqCreate: ConfirmCreatedCreditRfq,
+) => {
+  const { title, rfqDetails } = processRFQRequestConfirmation(rfqCreate)
+  const options: NotificationOptions = {
+    body: rfqDetails,
     icon: creditIconUrl,
     dir: "ltr",
   }
@@ -135,6 +150,18 @@ export async function registerCreditAcceptedNotifications() {
     acceptedRfqWithQuote$.subscribe((rfqWithQuote) =>
       sendQuoteAcceptedNotification(rfqWithQuote),
     )
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function registerRFQRequestConfirmationNotifications() {
+  try {
+    await notificationsGranted()
+
+    rfqRequestConfirmation$.subscribe((createdRFQRequest) => {
+      sendRFQCreatedConfirmationNotification(createdRFQRequest)
+    })
   } catch (e) {
     console.error(e)
   }

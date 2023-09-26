@@ -6,6 +6,10 @@ export function registerCreditQuoteNotifications(): Promise<void> {
   return Promise.reject("Function should be implemented at platform level")
 }
 
+export function registerRFQRequestConfirmationNotifications(): Promise<void> {
+  return Promise.reject("Function should be implemented at platform level")
+}
+
 export function unregisterCreditQuoteNotifications() {
   new Error("Function should be implemented at platform level")
 }

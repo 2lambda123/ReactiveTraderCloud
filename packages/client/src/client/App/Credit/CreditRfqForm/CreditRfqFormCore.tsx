@@ -2,13 +2,11 @@ import { Subscribe } from "@react-rxjs/core"
 import { useEffect } from "react"
 import styled from "styled-components"
 
-import { Loader } from "@/client/components/Loader"
 import { WithChildren } from "@/client/utils/utilityTypes"
 import { registerSimulatedDealerResponses } from "@/services/credit/creditRfqResponses"
 
 import { supportsTearOut } from "../../TearOutSection/supportsTearOut"
 import { TearOutComponent } from "../../TearOutSection/TearOutComponent"
-import { CreditRfqCreatedConfirmation } from "../CreditRfqs/CreditRfqConfirmation"
 import { CounterpartySelection } from "./CounterpartySelection"
 import { CreditInstrumentSearch } from "./CreditInstrumentSearch"
 import { DirectionToggle } from "./DirectionToggle"
@@ -67,8 +65,7 @@ const CreditRfqFormCore = ({ children }: WithChildren) => {
   }, [])
   return (
     <CreditRfqFormCoreWrapper>
-      <Subscribe fallback={<Loader ariaLabel="Loading New RFQ Form" />}>
-        <CreditRfqCreatedConfirmation />
+      <Subscribe fallback={children}>
         <CreditRfqHeader>
           New RFQ {supportsTearOut && <TearOutComponent section="newRfq" />}
         </CreditRfqHeader>
