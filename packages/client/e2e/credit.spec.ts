@@ -1,7 +1,7 @@
 import { expect, Page } from "@playwright/test"
 
 import { test } from "./fixtures"
-import { OPENFIN_PROJECT_NAME, TestTimeout, Timeout } from "./utils"
+import { ElementTimeout, OPENFIN_PROJECT_NAME, TestTimeout } from "./utils"
 
 test.describe("Credit", () => {
   let newRfqPage: Page
@@ -51,6 +51,41 @@ test.describe("Credit", () => {
   test.describe("New RFQ", () => {
     test.setTimeout(TestTimeout.EXTENDED)
     test("Create RFQ for GOOGL @smoke", async () => {
+      const MAX_ATTEMPT = 2
+
+      const clickAcceptButton = async (): Promise<boolean> => {
+        const firstQuote = rfqsPage.getByTestId("quotes").locator("div").first()
+        const acceptButton = firstQuote.getByText(/Accept/)
+
+        try {
+          await firstQuote.hover()
+          await acceptButton.waitFor({
+            state: "visible",
+            timeout: ElementTimeout.LONG,
+          })
+          await acceptButton.click({ timeout: ElementTimeout.AGGRESSIVE })
+          return true
+        } catch (exception) {
+          console.warn(`Failed to click on the 'accept' button, retrying ...`)
+          return false
+        }
+      }
+
+      // retry logic to circumvent intermittent failures at clicking on the accept button
+      const acceptQuote = async () => {
+        let attempt = 1
+        let isQuoteAccepted = false
+        while (!isQuoteAccepted) {
+          // fail test if max attempt threshold is reach
+          expect(
+            attempt,
+            "Max attempts to click on accept button is reach",
+          ).toBeLessThanOrEqual(MAX_ATTEMPT)
+          isQuoteAccepted = await clickAcceptButton()
+          attempt++
+        }
+      }
+
       await newRfqPage.getByPlaceholder(/Enter a CUSIP/).click()
       await newRfqPage
         .getByTestId("search-result-item")
@@ -77,46 +112,7 @@ test.describe("Credit", () => {
       // Navigate to Live
       await rfqsPage.getByText(/Live/).first().click()
 
-      const firstQuote = rfqsPage
-        .getByTestId("quotes")
-        .first()
-        .locator("div")
-        .first()
-
-      // retry logic to circumvent intermittent failures at clicking on the accept button
-      const MAX_ATTEMPT = 2
-      let isAcceptBtnClicked = false
-
-      const acceptQuote = async () => {
-        try {
-          await firstQuote.hover()
-          await firstQuote
-            .getByText(/Accept/)
-            .click({ timeout: Timeout.AGGRESSIVE })
-          isAcceptBtnClicked = true
-        } catch (exception) {
-          console.warn(`Failed to click on the 'accept' button, retrying ...`)
-          console.warn(`Error: ${exception}`)
-          isAcceptBtnClicked = false
-        }
-      }
-
-      await expect(firstQuote)
-        .not.toContainText("Awaiting response", {
-          timeout: Timeout.LONG,
-        })
-        .then(async () => {
-          let attempt = 1
-          while (!isAcceptBtnClicked) {
-            expect(
-              attempt,
-              "Max attempts to click on accept button is reach",
-            ).toBeLessThanOrEqual(MAX_ATTEMPT)
-            await acceptQuote()
-            attempt++
-          }
-          return
-        })
+      await acceptQuote()
 
       await rfqsPage.locator("li").getByText(/All/).nth(0).click()
       const btnTxt = await rfqsPage
@@ -173,7 +169,7 @@ test.describe("Credit", () => {
 
       await expect(rfqsPage.getByTestId("quotes").first()).toContainText(
         "$100",
-        { timeout: Timeout.NORMAL },
+        { timeout: ElementTimeout.AGGRESSIVE },
       )
     })
   })
@@ -208,7 +204,7 @@ test.describe("Credit", () => {
 
       await expect(rfqsPage.getByTestId("quotes").first()).toContainText(
         "Passed",
-        { timeout: Timeout.NORMAL },
+        { timeout: ElementTimeout.NORMAL },
       )
     })
   })
