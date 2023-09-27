@@ -23,7 +23,7 @@ export const processFxExecution = (executionTrade: ExecutionTrade) => {
   }
 }
 
-export const processCreditAccepted = (
+export const processCreditRfqAccepted = (
   rfq: RfqDetails,
   quote: PricedQuoteBody,
 ) => {
@@ -45,7 +45,7 @@ export const processCreditQuote = (quote: PricedQuoteDetails) => {
   }
 }
 
-export const processRFQRequestConfirmation = ({
+export const processCreditRfqCreated = ({
   request,
   rfqId,
 }: ConfirmCreatedCreditRfq) => {

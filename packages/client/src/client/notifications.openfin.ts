@@ -29,10 +29,10 @@ import { executions$, ExecutionTrade } from "@/services/executions"
 
 import { setCreditRfqCardHighlight } from "./App/Credit/CreditRfqs/CreditRfqCards"
 import {
-  processCreditAccepted,
+  processCreditRfqAccepted,
   processCreditQuote,
   processFxExecution,
-  processRFQRequestConfirmation,
+  processCreditRfqCreated,
 } from "./notificationsUtils"
 import { constructUrl } from "./utils/constructUrl"
 
@@ -149,7 +149,7 @@ const sendFxTradeNotification = (trade: ExecutionTrade) => {
 }
 
 const sendQuoteAcceptedNotification = ({ rfq, quote }: RfqWithPricedQuote) => {
-  const { title, tradeDetails } = processCreditAccepted(rfq, quote)
+  const { title, tradeDetails } = processCreditRfqAccepted(rfq, quote)
 
   const notificationOptions: TemplateCustom = {
     template: "custom",
@@ -221,9 +221,7 @@ const sendCreditQuoteNotification = (quote: PricedQuoteDetails) => {
 const sendRFQCreatedConfirmationNotification = (
   rfqRequestConfirmation: ConfirmCreatedCreditRfq,
 ) => {
-  const { title, rfqDetails } = processRFQRequestConfirmation(
-    rfqRequestConfirmation,
-  )
+  const { title, rfqDetails } = processCreditRfqCreated(rfqRequestConfirmation)
 
   const notificationOptions: TemplateCustom = {
     template: "custom",

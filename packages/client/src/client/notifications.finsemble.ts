@@ -1,14 +1,7 @@
-import {
-  ConfirmCreatedCreditRfq,
-  rfqRequestConfirmation$,
-} from "@/services/credit"
 import { ExecutionTrade } from "@/services/executions"
 import { executions$ } from "@/services/executions/executions"
 
-import {
-  processFxExecution,
-  processRFQRequestConfirmation,
-} from "./notificationsUtils"
+import { processFxExecution } from "./notificationsUtils"
 
 export function sendFxTradeNotification(executionTrade: ExecutionTrade) {
   const { title, tradeDetails: tradeCurrencyDetails } =

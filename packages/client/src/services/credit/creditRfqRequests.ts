@@ -1,7 +1,7 @@
 import { createSignal } from "@react-rxjs/utils"
 import { filter, map, tap, withLatestFrom } from "rxjs/operators"
 
-import { showRfqInSellSide } from "@/client/utils"
+import { multiplyBy1000, showRfqInSellSide } from "@/client/utils"
 import {
   AcceptQuoteRequest,
   ACK_ACCEPT_QUOTE_RESPONSE,
@@ -43,7 +43,7 @@ export const createCreditRfq$ = (request: CreateRfqRequest) => {
     direction,
     expirySecs,
     instrumentId,
-    quantity: quantity * 1000,
+    quantity: multiplyBy1000(quantity),
   }).pipe(
     tap((response) => {
       if (response.type === ACK_CREATE_RFQ_RESPONSE) {
@@ -61,7 +61,7 @@ export const rfqRequestConfirmation$ = createdCreditRfq$.pipe(
       ...response,
       request: {
         ...response.request,
-        quantity: response.request.quantity * 1000,
+        quantity: multiplyBy1000(response.request.quantity),
         instrument:
           creditInstruments.find(
             (instrument) => instrument.id === response.request.instrumentId,

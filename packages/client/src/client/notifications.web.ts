@@ -11,10 +11,10 @@ import {
 import { executions$, ExecutionTrade } from "@/services/executions"
 
 import {
-  processCreditAccepted,
+  processCreditRfqAccepted,
   processCreditQuote,
   processFxExecution,
-  processRFQRequestConfirmation,
+  processCreditRfqCreated,
 } from "./notificationsUtils"
 import { constructUrl } from "./utils/constructUrl"
 
@@ -35,7 +35,7 @@ const sendFxTradeNotification = (trade: ExecutionTrade) => {
 }
 
 const sendQuoteAcceptedNotification = ({ rfq, quote }: RfqWithPricedQuote) => {
-  const { title, tradeDetails } = processCreditAccepted(rfq, quote)
+  const { title, tradeDetails } = processCreditRfqAccepted(rfq, quote)
 
   const options: NotificationOptions = {
     body: `${rfq.direction} ${tradeDetails}`,
@@ -49,7 +49,7 @@ const sendQuoteAcceptedNotification = ({ rfq, quote }: RfqWithPricedQuote) => {
 const sendRFQCreatedConfirmationNotification = (
   rfqCreate: ConfirmCreatedCreditRfq,
 ) => {
-  const { title, rfqDetails } = processRFQRequestConfirmation(rfqCreate)
+  const { title, rfqDetails } = processCreditRfqCreated(rfqCreate)
   const options: NotificationOptions = {
     body: `You have sent a ${rfqCreate.request.direction} ${rfqDetails}`,
     icon: creditIconUrl,
