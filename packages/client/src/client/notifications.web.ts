@@ -155,7 +155,7 @@ export async function registerCreditAcceptedNotifications() {
   }
 }
 
-export async function registerRFQRequestConfirmationNotifications() {
+export async function registerCreditCreatedNotifications() {
   try {
     await notificationsGranted()
 

@@ -394,7 +394,7 @@ export const unregisterCreditQuoteNotifications = () => {
 }
 
 let areRFQRequestConfirmationNotificationsRegistered = false
-export const registerRFQRequestConfirmationNotifications = () => {
+export const registerCreditCreatedNotifications = () => {
   if (!areRFQRequestConfirmationNotificationsRegistered) {
     areRFQRequestConfirmationNotificationsRegistered = true
     rfqRequestConfirmation$.subscribe((rfqRquest) => {

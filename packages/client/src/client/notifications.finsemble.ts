@@ -23,22 +23,6 @@ export function sendFxTradeNotification(executionTrade: ExecutionTrade) {
   window.FSBL.Clients.NotificationClient.notify([notification])
 }
 
-export function sendRFQCreatedConfirmationNotification(
-  rfqRequestConfirmation: ConfirmCreatedCreditRfq,
-) {
-  const { title, rfqDetails } = processRFQRequestConfirmation(
-    rfqRequestConfirmation,
-  )
-  const body = `You have sent a ${rfqRequestConfirmation.request.direction} ${rfqRequestConfirmation.request.direction} ${rfqDetails}`
-
-  const notification = new window.FSBL.Clients.NotificationClient.Notification()
-  notification.title = title
-  notification.details = body
-  notification.type = "rfq"
-
-  window.FSBL.Clients.NotificationClient.notify([notification])
-}
-
 export function registerFxNotifications() {
   executions$.subscribe({
     next: (executionTrade) => {
@@ -67,6 +51,6 @@ export function unregisterCreditQuoteNotifications() {
   // no-op
 }
 
-export function registerRFQRequestConfirmationNotifications() {
+export function registerCreditCreatedNotifications() {
   // no-op
 }
