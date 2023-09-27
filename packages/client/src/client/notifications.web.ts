@@ -51,7 +51,7 @@ const sendRFQCreatedConfirmationNotification = (
 ) => {
   const { title, rfqDetails } = processRFQRequestConfirmation(rfqCreate)
   const options: NotificationOptions = {
-    body: rfqDetails,
+    body: `You have sent a ${rfqCreate.request.direction} ${rfqDetails}`,
     icon: creditIconUrl,
     dir: "ltr",
   }

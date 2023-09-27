@@ -19,8 +19,10 @@ import {
 import { Direction } from "@/generated/TradingGateway"
 import {
   acceptedRfqWithQuote$,
+  ConfirmCreatedCreditRfq,
   lastQuoteReceived$,
   PricedQuoteDetails,
+  rfqRequestConfirmation$,
   RfqWithPricedQuote,
 } from "@/services/credit"
 import { executions$, ExecutionTrade } from "@/services/executions"
@@ -30,6 +32,7 @@ import {
   processCreditAccepted,
   processCreditQuote,
   processFxExecution,
+  processRFQRequestConfirmation,
 } from "./notificationsUtils"
 import { constructUrl } from "./utils/constructUrl"
 
@@ -215,6 +218,48 @@ const sendCreditQuoteNotification = (quote: PricedQuoteDetails) => {
   create(notificationOptions)
 }
 
+const sendRFQCreatedConfirmationNotification = (
+  rfqRequestConfirmation: ConfirmCreatedCreditRfq,
+) => {
+  const { title, rfqDetails } = processRFQRequestConfirmation(
+    rfqRequestConfirmation,
+  )
+
+  const notificationOptions: TemplateCustom = {
+    template: "custom",
+    templateOptions: createNotificationTemplate(
+      rfqRequestConfirmation.request.direction,
+    ),
+    templateData: {
+      messageTradeDirection:
+        rfqRequestConfirmation.request.direction.toUpperCase(),
+      messageTradeDetails: rfqDetails,
+    },
+
+    icon: creditIconUrl,
+    category: "RFQ Created",
+    title,
+    indicator: {
+      text: "new rfq",
+      color: IndicatorColor.GRAY,
+    },
+    buttons: [
+      {
+        title: "View RFQ",
+        iconUrl: creditIconUrl,
+        onClick: {
+          task: TASK_HIGHLIGHT_CREDIT_RFQ,
+          payload: {
+            rfqId: rfqRequestConfirmation.rfqId,
+          },
+        },
+      },
+    ],
+  }
+
+  create(notificationOptions)
+}
+
 const TOPIC_HIGHLIGHT_FX_BLOTTER = "highlight-fx-blotter"
 export const TOPIC_HIGHLIGHT_CREDIT_RFQ = "highlight-credit-rfq"
 export const TOPIC_HIGHLIGHT_CREDIT_BLOTTER = "highlight-credit-blotter"
@@ -345,5 +390,15 @@ export const unregisterCreditQuoteNotifications = () => {
   if (quotesReceivedSubscription) {
     areCreditQuoteNotificationsRegistered = false
     quotesReceivedSubscription.unsubscribe()
+  }
+}
+
+let areRFQRequestConfirmationNotificationsRegistered = false
+export const registerRFQRequestConfirmationNotifications = () => {
+  if (!areRFQRequestConfirmationNotificationsRegistered) {
+    areRFQRequestConfirmationNotificationsRegistered = true
+    rfqRequestConfirmation$.subscribe((rfqRquest) => {
+      sendRFQCreatedConfirmationNotification(rfqRquest)
+    })
   }
 }

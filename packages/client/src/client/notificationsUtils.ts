@@ -51,8 +51,8 @@ export const processRFQRequestConfirmation = ({
 }: ConfirmCreatedCreditRfq) => {
   return {
     title: `RFQ Created: RFQ ID ${rfqId}`,
-    rfqDetails: `You have sent a ${request.direction} RFQ for ${formatNumber(
-      request.quantity * 1000,
-    )} ${request.instrument?.name} to ${request.dealerIds.length} dealers`,
+    rfqDetails: `RFQ for ${formatNumber(request.quantity)} ${
+      request.instrument?.name
+    } to ${request.dealerIds.length} dealers`,
   }
 }

@@ -4,6 +4,7 @@ import {
   registerCreditAcceptedNotifications,
   registerCreditQuoteNotifications,
   registerFxNotifications,
+  registerRFQRequestConfirmationNotifications,
 } from "@/client/notifications.openfin"
 import { initConnection } from "@/services/connection"
 import { registerSimulatedDealerResponses } from "@/services/credit/creditRfqResponses"
@@ -53,6 +54,7 @@ async function init() {
   registerFxNotifications(handleFxTradeNotification)
   registerCreditQuoteNotifications(handleCreditRfqNotification)
   registerCreditAcceptedNotifications()
+  registerRFQRequestConfirmationNotifications()
 
   const sub = registerSimulatedDealerResponses()
 
