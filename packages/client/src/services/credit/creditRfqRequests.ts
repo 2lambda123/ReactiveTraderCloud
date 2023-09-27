@@ -53,7 +53,7 @@ export const createCreditRfq$ = (request: CreateRfqRequest) => {
   )
 }
 
-export const rfqRequestConfirmation$ = createdCreditRfq$.pipe(
+export const createdCreditConfirmation$ = createdCreditRfq$.pipe(
   filter((response) => response !== null),
   withLatestFrom(creditInstruments$),
   map(

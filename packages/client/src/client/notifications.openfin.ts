@@ -20,19 +20,19 @@ import { Direction } from "@/generated/TradingGateway"
 import {
   acceptedRfqWithQuote$,
   ConfirmCreatedCreditRfq,
+  createdCreditConfirmation$,
   lastQuoteReceived$,
   PricedQuoteDetails,
-  rfqRequestConfirmation$,
   RfqWithPricedQuote,
 } from "@/services/credit"
 import { executions$, ExecutionTrade } from "@/services/executions"
 
 import { setCreditRfqCardHighlight } from "./App/Credit/CreditRfqs/CreditRfqCards"
 import {
-  processCreditRfqAccepted,
   processCreditQuote,
-  processFxExecution,
+  processCreditRfqAccepted,
   processCreditRfqCreated,
+  processFxExecution,
 } from "./notificationsUtils"
 import { constructUrl } from "./utils/constructUrl"
 
@@ -296,6 +296,8 @@ export const handleHighlightRfqAction = (event: NotificationActionEvent) => {
 export type NotificationActionHandler = (event: NotificationActionEvent) => void
 
 let areFxNotificationsRegistered = false
+let executionSubscription: Subscription | null = null
+
 export const registerFxNotifications = (
   handler?: NotificationActionHandler,
 ) => {
@@ -313,7 +315,7 @@ export const registerFxNotifications = (
       handler || handleHighlightFxBlotterAction,
     )
 
-    executions$.subscribe({
+    executionSubscription = executions$.subscribe({
       next: (executionTrade) => {
         sendFxTradeNotification(executionTrade)
       },
@@ -327,8 +329,15 @@ export const registerFxNotifications = (
   }
 }
 
+export const unregisterFxNotifications = () => {
+  if (executionSubscription) {
+    areFxNotificationsRegistered = false
+    executionSubscription.unsubscribe()
+  }
+}
+
 let areCreditQuoteNotificationsRegistered = false
-export const registerCreditQuoteNotifications = (
+const registerCreditQuoteNotifications = (
   handler?: NotificationActionHandler,
 ) => {
   if (!areCreditQuoteNotificationsRegistered) {
@@ -359,7 +368,8 @@ export const registerCreditQuoteNotifications = (
 }
 
 let areCreditAcceptedNotificationsRegistered = false
-export const registerCreditAcceptedNotifications = (
+let acceptedRfqWithQuoteSubscription: Subscription | null = null
+const registerCreditAcceptedNotifications = (
   handler?: NotificationActionHandler,
 ) => {
   if (!areCreditAcceptedNotificationsRegistered) {
@@ -378,25 +388,49 @@ export const registerCreditAcceptedNotifications = (
       handler || handleHighlightCreditBlotterAction,
     )
 
-    acceptedRfqWithQuote$.subscribe((rfq) => {
-      sendQuoteAcceptedNotification(rfq)
-    })
+    acceptedRfqWithQuoteSubscription = acceptedRfqWithQuote$.subscribe(
+      (rfq) => {
+        sendQuoteAcceptedNotification(rfq)
+      },
+    )
   }
 }
 
-export const unregisterCreditQuoteNotifications = () => {
+let areCreatedCreditNotificationsRegistered = false
+let createdCreditSubscription: Subscription | null = null
+
+const registerCreatedCreditNotification = () => {
+  if (!areCreatedCreditNotificationsRegistered) {
+    areCreatedCreditNotificationsRegistered = true
+    createdCreditSubscription = createdCreditConfirmation$.subscribe(
+      (rfqRquest) => {
+        sendRFQCreatedConfirmationNotification(rfqRquest)
+      },
+    )
+  }
+}
+
+export const registerCreditNotifications = (
+  handler?: NotificationActionHandler,
+) => {
+  registerCreatedCreditNotification()
+  registerCreditAcceptedNotifications(handler)
+  registerCreditQuoteNotifications(handler)
+}
+
+export const unregisterCreditNotifications = () => {
   if (quotesReceivedSubscription) {
     areCreditQuoteNotificationsRegistered = false
     quotesReceivedSubscription.unsubscribe()
   }
-}
 
-let areRFQRequestConfirmationNotificationsRegistered = false
-export const registerCreditCreatedNotifications = () => {
-  if (!areRFQRequestConfirmationNotificationsRegistered) {
-    areRFQRequestConfirmationNotificationsRegistered = true
-    rfqRequestConfirmation$.subscribe((rfqRquest) => {
-      sendRFQCreatedConfirmationNotification(rfqRquest)
-    })
+  if (acceptedRfqWithQuoteSubscription) {
+    areCreditAcceptedNotificationsRegistered = false
+    acceptedRfqWithQuoteSubscription.unsubscribe()
+  }
+
+  if (createdCreditSubscription) {
+    areCreatedCreditNotificationsRegistered = false
+    createdCreditSubscription.unsubscribe()
   }
 }
