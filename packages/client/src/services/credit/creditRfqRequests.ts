@@ -16,8 +16,8 @@ import {
 
 import { PricedQuoteBody } from "../rfqs/types"
 import { adaptiveDealerId$ } from "./creditDealers"
-import { creditRfqsById$, RfqDetails } from "./creditRfqs"
 import { creditInstruments$ } from "./creditInstruments"
+import { creditRfqsById$, RfqDetails } from "./creditRfqs"
 
 export interface CreatedCreditRfq {
   request: CreateRfqRequest
