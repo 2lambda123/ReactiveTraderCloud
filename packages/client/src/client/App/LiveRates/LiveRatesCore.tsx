@@ -1,13 +1,13 @@
 import { Subscribe } from "@react-rxjs/core"
+import { useEffect } from "react"
 import { merge } from "rxjs"
-
-import { WithChildren } from "@/client/utils/utilityTypes"
 
 import {
   registerFxNotifications,
   unregisterFxNotifications,
 } from "@/client/notifications"
-import { useEffect } from "react"
+import { WithChildren } from "@/client/utils/utilityTypes"
+
 import { MainHeader, mainHeader$ } from "./MainHeader"
 import { Tiles, tiles$ } from "./Tiles"
 

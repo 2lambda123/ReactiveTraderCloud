@@ -92,12 +92,14 @@ const notificationsGranted = () =>
     }
   })
 
+let executionSubscription: Subscription | null = null
+
 export async function registerFxNotifications() {
   try {
     await notificationsGranted()
 
     // send trade executed for this tab only (driven from executeTrade ACK)
-    executions$.subscribe({
+    executionSubscription = executions$.subscribe({
       next: (executionTrade) => {
         sendFxTradeNotification(executionTrade)
       },
@@ -110,6 +112,12 @@ export async function registerFxNotifications() {
     })
   } catch (_) {
     console.log("Notification permission was not granted.")
+  }
+}
+
+export function unregisterFxNotifications() {
+  if (executionSubscription) {
+    executionSubscription.unsubscribe()
   }
 }
 
