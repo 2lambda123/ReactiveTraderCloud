@@ -9,7 +9,6 @@ import {
 import { WithChildren } from "@/client/utils/utilityTypes"
 
 import { CreditRfqCardGrid } from "./CreditRfqCards"
-import { CreditRfqAcceptedConfirmation } from "./CreditRfqConfirmation"
 import { CreditRfqsHeader } from "./CreditRfqsHeader"
 
 const CreditRfqsCoreWrapper = styled.div`
@@ -30,7 +29,6 @@ const CreditRfqsCore = ({ children }: WithChildren) => {
       <CreditRfqsCoreWrapper>
         <CreditRfqsHeader />
         <CreditRfqCardGrid />
-        <CreditRfqAcceptedConfirmation />
       </CreditRfqsCoreWrapper>
     </Subscribe>
   )
