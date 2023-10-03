@@ -55,8 +55,8 @@ test.describe("Trade Blotter", () => {
 
   // eslint-disable-next-line no-empty-pattern
   test.afterAll(async ({}, testInfo) => {
-    if (testInfo.project.name === OPENFIN_PROJECT_NAME) {
-      await blotterPage.getByTestId("filter-button").click()
+    if (await blotterPage.isVisible("[data-testid='filter-button']")) {
+      await blotterPage.locator("[data-testid='filter-button']").click()
     }
   })
 
@@ -90,7 +90,7 @@ test.describe("Trade Blotter", () => {
         })
         isNewRowFlashing = true
       } catch (exception) {
-        console.warn(`Failed to to see row flashing, retrying ...`)
+        console.warn(`Fail to detect new row flashing, retrying ...`)
         isNewRowFlashing = false
       }
     }
