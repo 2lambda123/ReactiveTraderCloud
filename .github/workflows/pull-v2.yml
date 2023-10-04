@@ -1,0 +1,56 @@
+name: to_be_deleted
+
+on:
+  push:
+    branches:
+      - "**"
+
+defaults:
+  run:
+    working-directory: packages/client
+
+env:
+  BUCKET_WEB: reactive-trader-web-builds
+  BUCKET_OPENFIN: reactive-trader-openfin-builds
+  BUCKET_FINSEMBLE: reactive-trader-finsemble-builds
+  ENVIRONMENT: env
+
+jobs:
+
+  web-end-to-end-test:
+    name: Web e2e test - All
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set Node version
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install
+        run: npm ci
+      - name: Test
+        env:
+          E2E_RTC_WEB_ROOT_URL: https://web.env.reactivetrader.com/pull/22880
+        run: |
+          npm run e2e:web
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-report
+          path: packages/client/playwright-report/
+          retention-days: 7
+      - name: Add instructions to consult playwright report trace
+        if: failure()
+        run: |
+          echo "## :red_circle: Test failed" >> $GITHUB_STEP_SUMMARY
+          echo "### How to consult playwright report with trace" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download playwright report above" >> $GITHUB_STEP_SUMMARY
+          echo "2. unzip and copy extracted folder name" >> $GITHUB_STEP_SUMMARY
+          echo "3. open a terminal and cd to your download folder" >> $GITHUB_STEP_SUMMARY
+          echo "4. run \`npx playwright show-report name-of-extracted-playwright-report-folder\`" >> $GITHUB_STEP_SUMMARY
+          echo "5. consult trace from failed test(s) detail " >> $GITHUB_STEP_SUMMARY

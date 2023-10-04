@@ -4,8 +4,9 @@ import { devices } from "@playwright/test"
 const config: PlaywrightTestConfig = {
   testDir: "./e2e",
   /* Maximum time one test can run for. */
-  timeout: 60_000,
+  timeout: 5_000,
   workers: 1,
+  maxFailures: 1,
   projects: [
     {
       name: "chrome",
