@@ -70,6 +70,30 @@ To run the web UI
 
 ## CI/CD
 
+### GitHub Actions Failure
+
+If you encounter a GitHub Actions failure, follow these steps to resolve the issue:
+1. **Potential Causes**:
+   - Check for changes to dependencies in the `package.json` file.
+   - Verify the workflow configuration in the GitHub Actions YAML file.
+
+2. **Step-by-Step Instructions**:
+   - **Check Package.json File**:
+     - Inspect the `package.json` file for any updates or changes to dependencies that may have caused the failure.
+
+   - **Update Workflow Configuration**:
+     - Review the GitHub Actions workflow configuration (YAML file) and ensure that it is correctly set up to run the necessary build and deployment steps.
+
+3. **Additional Troubleshooting**:
+   - Check for commonly known issues that might cause GitHub Actions failure, such as:
+     - Incorrect environment settings in the workflow.
+     - Permissions issues related to GitHub secrets and tokens.
+     - Anomalies in the build environment.
+
+   - Ensure that the instructions provided by this guide are clear and easy to follow for developers.
+
+### Continuous Integration/Continuous Deployment (CI/CD)
+
 We practice continuous integration and deployment. Every branch and pull request triggers a build and deployment to an ephemeral environment. Merging to master causes a build and deployment to our [development environment](https://web.dev.reactivetrader.com).
 
 ## Contributing
