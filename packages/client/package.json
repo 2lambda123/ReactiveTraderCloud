@@ -99,7 +99,7 @@
     "styled-components": "5.3.9"
   },
   "devDependencies": {
-    "@google-cloud/dialogflow": "^4.7.0",
+    "@google-cloud/dialogflow": "^6.3.0",
     "@openfin/automation-cli": "1.1.6",
     "@playwright/test": "1.38.1",
     "@storybook/addon-actions": "^7.0.2",
